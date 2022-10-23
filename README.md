@@ -73,9 +73,17 @@ The DS1307 real time clock seems to be a little sensitive to power supply noise.
 
 The v2 PCB also has a footprint to allow the use of a MAX31855 thermocouple, if builders are keen to experiment with temperature measurement, display and control of various hot processes.
 
+# LED Matrix clock build
+
 The pins for the MAX31855 thermocouple supply most of the needed connections for an SPI driven display, such as commonly available MAX7219 LED matrices. The example build shown above uses an 8x32 MAX7219 LED matrix instead of the TM1637, connected to GND, 5v, SCK, and D9 for CS on the MAX31855 header, and MOSI (accessed on the RTC/SD board header).
 
-A simple code example has been provided which provides some of the functionality of the TM1637 build with a MAX7219 LED Matrix based build, along with code to read A0-A3 connected button presses to adjust the time if required. The main differences are that it does not stream results to serial, display of tvoc has not been implemented, and it does not log data to the SD card. It displays temperature for 4 seconds, humidity for 4 seconds, CO2 for 4 seconds, and then the time for 48 seconds, after which the cycle repeats. The LED matrix based build was conceived of as more of an example of how a clock with environmental sensing could also be implemented with the v2 PCB, rather than simply another version of the same data logging air quality monitor.
+A simple code example has been provided which provides some of the functionality of the TM1637 build but using a MAX7219 based 8x32 LED Matrix, along with code to read A0-A3 connected button presses to adjust the time if required. The main differences are that it does not stream results to serial, display of tvoc has not been implemented, and it does not log data to the SD card.
+
+It displays temperature for 4 seconds, humidity for 4 seconds, CO2 for 4 seconds, and then the time for 48 seconds, after which the cycle repeats.
+
+The LED matrix based build was conceived of as more of an example of how an inexpensive clock with environmental sensing could also be implemented with the v2 PCB, rather than simply another version of the same data logging air quality monitor. The aluminium bracket used for the switches and DC socket was surplus tile edging, and the white diffuser panel was found in a discarded fax/printer.
+
+Again, it is worth noting that the DS1307 real time clock seems sensitive to power supply noise, so it may be worth trying some filtering on the power supply, and/or some decoupling capacitors to smoothe the supply if glitches are noted.
 
 ![LED Matrix enclosure and diffuser](images/001-LED-matrix-enclosure-with-diffuser.JPG)
 ![LED Matrix mechanical mountings](images/002-LED-matrix-mechanical-mounting.JPG)
