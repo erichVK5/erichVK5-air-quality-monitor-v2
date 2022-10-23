@@ -7,14 +7,14 @@ The PCB and accompanying software allow the CCS811 sensor to be used to monitor 
 
 This is a leaner version of https://github.com/erichVK5/erichVK5-air-quality-monitor, achieving a significant cost reduction by using an Arduino nano and a compact Deek Robot 8122 RTC/SD board on a custom PCB which also mounts the DF Robot CCS811 CO2/VOC sensor board and the AM2320 temperature/humidity sensor. The board is code compatible with the original air quality monitor, except for the real time clock, which uses a DS1307 instead of a PCF8523. The board has been designed to allow the option of mounting an Arduino Nano Every, but care must be taken if there are plans to use an external 5V power supply for the board, as the Arduino Nano Every, unlike the Arduino Nano, can apparently backfeed 5V down an inserted USB cable to a host.
 
-The revised PCB was designed in pcb-rnd and simplifies the connections between the TM1367 display, CCS811 sensor, AM2320 sensor and Arduino Nano. The PCB dimensions have been carefully chosen to allow efficient panelisation on standard panel sizes if ordering larger quantities from PCB suppliers.
+The revised PCB was designed in pcb-rnd and simplifies the connections between the TM1637 display, CCS811 sensor, AM2320 sensor and Arduino Nano. The PCB dimensions have been carefully chosen to allow efficient panelisation on standard panel sizes if ordering larger quantities from PCB suppliers.
 
 ![PCB top side](images/PCB-top-side.JPG)
 ![PCB bottom side](images/PCB-bottom-side.JPG)
 
 Low cost data logging air quality monitors remain useful in educational and community settings to provide a qualitative indication of air quality over time. In particular, CO2 levels can be a useful proxy for air turnover in built environments, and by extension, inform measures that seek to reduce the risk of persisting airborne pathogens. The utility of CO2 as a proxy for airborne pathogen loads will be affected by sources of combustion or fermentation (i.e. processes producing CO2 in addition to people) in the indoor space, and by the use of air purifying devices, such as those circulating air through suitable filters.
 
-The PCB has a footprint allowing connection to an inexpensive TM1367 based four digit LED display for the display of readings, but with suitable code modification, other display options are possible. For example, here is a build using a MAX7219 based 8x32 LED Matrix:
+The PCB has a footprint allowing connection to an inexpensive TM1637 based four digit LED display for the display of readings, but with suitable code modification, other display options are possible. For example, here is a build using a MAX7219 based 8x32 LED Matrix:
 
 ![LED matrix version](images/009-LED-matrix-version-time.JPG)
 
@@ -63,8 +63,12 @@ For real time clock operations, the datalogging board also shares the i2c bus wi
 
 This leaves multiple pins free on the Arduino Nano if code customisation is needed, such as for on/off signals for fans or building ventilation systems. Spare pins on the arduino nano have been broken out to pads, to allow wiring to other actuators, sensors or switches.
 
-The PCB also has a footprint to allow the use of a MAX31855 thermocouple, if builders are keen to experiment with temperature measurement, display and control of various hot processes.
+The v2 PCB also has a footprint to allow the use of a MAX31855 thermocouple, if builders are keen to experiment with temperature measurement, display and control of various hot processes.
 
-The PCB also has pads to connect external Vin to the Arduino Nano. Builders must ensure that the overall power demands of their display and assembled unit will fall within that which can be provided by the Arduino Nano voltage regulator.
+The pins for the MAX31855 thermocouple supply most of the needed connections for an SPI driven display, such as commonly available MAX7219 LED matrices. The example build shown above uses an 8x32 MAX7219 LED matrix instead of the TM1637, connected to GND, 5v, SCK, and D9 for CS on the MAX31855 header, and MOSI (accessed on the RTC/SD board header).
 
-ALternatively, there is a footprint for a connector for provision of an external 5V supply to the 5V rail (instead of relying on USB for power) that feeds the peripherals and Arduino Nano 5V pin, BUT(!)... although a standard Arduino Nano can be powered via the 5V pin from an external source without backfeeding the voltage down the USB cable to the host, an Arduino Nano Every will apparently allow the power supplied via the 5V pin to go up the USB cable to a host, if connected.
+A simple code example has been provided which provides some of the functionality of the TM1637 build with an MAX7219 LED Matrix based build, along with code to read A0-A3 connected button presses to adjust the time if required. The main differences are that it does not stream results to serial, display of tvoc has not been implemented, and it does not log data to the SD card.
+
+The v2 PCB also has pads to connect external Vin to the Arduino Nano. Builders must ensure that the overall power demands of their display and assembled unit will fall within that which can be provided by the Arduino Nano voltage regulator.
+
+ALternatively, there is also footprint provided on the v2 PCB for a connector for provision of an external 5V supply to the 5V rail (instead of relying on USB for power) that feeds the peripherals and Arduino Nano 5V pin, BUT(!)... although a standard Arduino Nano can be powered via the 5V pin from an external source without backfeeding the voltage down the USB cable to the host, an Arduino Nano Every will apparently allow the power supplied via the 5V pin to go up the USB cable to a host, if connected.
