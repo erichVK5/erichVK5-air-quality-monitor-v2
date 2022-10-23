@@ -9,12 +9,14 @@ This is a leaner version of https://github.com/erichVK5/erichVK5-air-quality-mon
 
 The revised PCB was designed in pcb-rnd and simplifies the connections between the TM1367 display, CCS811 sensor, AM2320 sensor and Arduino Nano. The PCB dimensions have been carefully chosen to allow efficient panelisation on standard panel sizes if ordering larger quantities from PCB suppliers.
 
-![assembled board](images/PCB-top-side.JPG)
-![assembled board](images/PCB-bottom-side.JPG)
+![PCB top side](images/PCB-top-side.JPG)
+![PCB bottom side](images/PCB-bottom-side.JPG)
 
 Low cost data logging air quality monitors remain useful in educational and community settings to provide a qualitative indication of air quality over time. In particular, CO2 levels can be a useful proxy for air turnover in built environments, and by extension, inform measures that seek to reduce the risk of persisting airborne pathogens. The utility of CO2 as a proxy for airborne pathogen loads will be affected by sources of combustion or fermentation (i.e. processes producing CO2 in addition to people) in the indoor space, and by the use of air purifying devices, such as those circulating air through suitable filters.
 
-The PCB has a footprint allowing connection to an inexpensive TM1367 based four digit LED display for the display of readings, but with suitable code modification, other display options are possible.
+The PCB has a footprint allowing connection to an inexpensive TM1367 based four digit LED display for the display of readings, but with suitable code modification, other display options are possible. For example, here is a build using a MAX7219 based 8x32 LED Matrix:
+
+![LED matrix version](images/009-LED-matrix-version-time.JPG)
 
 After assembly of the PCB headers and sub-boards is complete, a battery can be installed on the Deek Robot 8122 datalogging board. The DS1307 clock example code available within the arduino library manager can then be used to set the current time.
 
