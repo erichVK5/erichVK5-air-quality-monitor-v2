@@ -5,7 +5,7 @@ A leaner version of the original erichVK5 air quality monitor
 
 The PCB and accompanying software allow the CCS811 sensor to be used to monitor CO2 and total volatile organic compounds, and the AM2320 sensor allows humidity and temperature to be recorded as well.
 
-This is a leaner version of https://github.com/erichVK5/erichVK5-air-quality-monitor, achieving a significant cost reduction by using an Arduino nano and a compact Deek Robot 8122 RTC/SD board on a custom PCB which also mounts the DF Robot CCS811 CO2/VOC sensor board and the AM2320 temperature/humidity sensor. The board is code compatible with the original air quality monitor, except for the real time clock, which uses a DS1307 instead of a PCF8523.
+This is a leaner version of https://github.com/erichVK5/erichVK5-air-quality-monitor, achieving a significant cost reduction by using an Arduino nano and a compact Deek Robot 8122 RTC/SD board on a custom PCB which also mounts the DF Robot CCS811 CO2/VOC sensor board and the AM2320 temperature/humidity sensor. The board is code compatible with the original air quality monitor, except for the real time clock, which uses a DS1307 instead of a PCF8523. The board has been designed to allow the option of mounting an Arduino Nano Every, but care must be taken if there are plans to use an external 5V power supply for the board, as the Arduino Nano Every, unlike the Arduino Nano, can apparently backfeed 5V down an inserted USB cable to a host.
 
 The revised PCB was designed in pcb-rnd and simplifies the connections between the TM1367 display, CCS811 sensor, AM2320 sensor and Arduino Nano.
 
@@ -43,18 +43,18 @@ It is recommended that the CCS811 be given a 48 hour initial burn in period and 
 
 The v2 PCB layout can be opened in pcb-rnd, and gerbers for the shield have been provided in a zip file to allow ordering from the usual online PCB suppliers.
 
-Here is the schematic for the shield when using the CCS811, AM2320 and TM1637 four digit seven segment display
+The schematic for the v2 board is essentially identical to that of the original version, with SCL using A5 and SDA using A4 on the Arduino Nano.
 
 ![Shield schematic using TM1637 display](images/LLS-shield-TM1637-schematic-v1.png)
 
-For data transfers to and from the SD card, the Deek Robot Datalogging Board uses SPI on the following Arduino Uno pins:
+For data transfers to and from the SD card, the Deek Robot Datalogging board uses SPI on the following Arduino Uno pins:
 
 - SCK
 - MISO
 - MOSI
 - D10 as CS (chip select)
 
-For real time clock operations, the datalogging shield also shares the i2c bus with with the CCS811 and AM2320 sensors, using the following pins:
+For real time clock operations, the datalogging board also shares the i2c bus with with the CCS811 and AM2320 sensors, using the following pins:
 
 - SDA(A4)
 - SCL(A5)
@@ -65,6 +65,4 @@ The PCB also has a footprint to allow the use of a MAX31855 thermocouple, if bui
 
 The PCB also has pads to connect external Vin to the Arduino Nano. Builders must ensure that the overall power demands of their display and assembled unit will fall within that which can be provided by the Arduino Nano voltage regulator.
 
-There is also a connector for provision of an external 5V supply instead of relying on USB for power, but...
-
-NB: although a standard Arduino Nano can be powered via the 5V rail from an external source, this can damage an Arduino Nano Every.  
+ALternatively, there is a footprint for a connector for provision of an external 5V supply to the 5V rail (instead of relying on USB for power) that feeds the peripherals and Arduino Nano 5V pin, BUT(!)... although a standard Arduino Nano can be powered via the 5V pin from an external source without backfeeding the voltage down the USB cable to the host, an Arduino Nano Every will apparently allow the power supplied via the 5V pin to go up the USB cable to a host, if connected.
