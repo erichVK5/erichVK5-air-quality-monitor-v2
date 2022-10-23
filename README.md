@@ -77,3 +77,11 @@ The pins for the MAX31855 thermocouple supply most of the needed connections for
 
 A simple code example has been provided which provides some of the functionality of the TM1637 build with a MAX7219 LED Matrix based build, along with code to read A0-A3 connected button presses to adjust the time if required. The main differences are that it does not stream results to serial, display of tvoc has not been implemented, and it does not log data to the SD card. It displays temperature for 4 seconds, humidity for 4 seconds, CO2 for 4 seconds, and then the time for 48 seconds, after which the cycle repeats. The LED matrix based build was conceived of as more of an example of how a clock with environmental sensing could also be implemented with the v2 PCB, rather than simply another version of the same data logging air quality monitor.
 
+![LED Matrix enclosure and diffuser](001-LED-matrix-enclosure-with-diffuser.JPG)
+![LED Matrix mechanical mountings](002-LED-matrix-mechanical-mounting.JPG)
+![LED Matrix mounting details](003-LED-matrix-mounting-details.JPG)
+![LED Matrix subassembly installation](004-LED-matrix-version-subassembly-installation.JPG)
+![LED Matrix testing temp](005-LED-matrix-version-testing-temp-shown.JPG)
+![LED Matrix testing humidity](006-LED-matrix-version-testing-humidity-shown.JPG)
+![LED Matrix testing C02](007-LED-matrix-version-testing-CO2-shown.JPG)
+![LED Matrix testing time](008-LED-matrix-version-testing-time-shown.JPG)
