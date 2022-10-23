@@ -69,6 +69,8 @@ The v2 PCB also has pads to connect external Vin to the Arduino Nano. Builders m
 
 ALternatively, there is also footprint provided on the v2 PCB for a connector for provision of an external 5V supply to the 5V rail (instead of relying on USB for power) that feeds the peripherals and Arduino Nano 5V pin, BUT(!)... although a standard Arduino Nano can be powered via the 5V pin from an external source without backfeeding the voltage down the USB cable to the host, an Arduino Nano Every will apparently allow the power supplied via the 5V pin to go up the USB cable to a host, if connected.
 
+The DS1307 real time clock seems to be a little sensitive to power supply noise. If there are issues with the clock not updating, it may be worth trying some filtering on the power supply, and/or some decoupling capacitors to smoothe the supply.
+
 The v2 PCB also has a footprint to allow the use of a MAX31855 thermocouple, if builders are keen to experiment with temperature measurement, display and control of various hot processes.
 
 The pins for the MAX31855 thermocouple supply most of the needed connections for an SPI driven display, such as commonly available MAX7219 LED matrices. The example build shown above uses an 8x32 MAX7219 LED matrix instead of the TM1637, connected to GND, 5v, SCK, and D9 for CS on the MAX31855 header, and MOSI (accessed on the RTC/SD board header).
