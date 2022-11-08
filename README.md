@@ -51,14 +51,14 @@ The schematic for the v2 board is essentially identical to that of the original 
 
 ![Shield schematic using TM1637 display](images/LLS-shield-TM1637-schematic-v1.png)
 
-For data transfers to and from the SD card, the Deek Robot Datalogging board uses SPI on the following Arduino Uno pins:
+For data transfers to and from the SD card, the Deek Robot 8122 datalogging board uses SPI on the following Arduino Uno pins:
 
 - SCK
 - MISO
 - MOSI
 - D10 as CS (chip select)
 
-For real time clock operations, the datalogging board also shares the i2c bus with with the CCS811 and AM2320 sensors, using the following pins:
+For real time clock operations, the Deek Robot 8122 datalogging board also shares the i2c bus with with the CCS811 and AM2320 sensors, using the following pins:
 
 - SDA(A4)
 - SCL(A5)
@@ -70,6 +70,8 @@ The v2 PCB also has pads to connect external Vin to the Arduino Nano. Builders m
 ALternatively, there is also footprint provided on the v2 PCB for a connector for provision of an external 5V supply to the 5V rail (instead of relying on USB for power) that feeds the peripherals and Arduino Nano 5V pin, BUT(!)... although a standard Arduino Nano can be powered via the 5V pin from an external source without backfeeding the voltage down the USB cable to the host, an Arduino Nano Every will apparently allow the power supplied via the 5V pin to go up the USB cable to a host, if connected.
 
 The DS1307 real time clock seems to be a little sensitive to power supply noise. If there are issues with the clock not updating, it may be worth trying some filtering on the power supply, and/or some decoupling capacitors to smoothe the supply.
+
+Unlike the Adafruit data logging shield which includes 10k pullup resistors for the SDA and SCL lines, they may not be as strong or may be absent on the Deek Robot 8122 datalogging board. Accordingly, for reliable operation with the clock, DF Robot and AM2320 sensors all on the same i2c bus, pullup resistors (4k7 or 10k) should be added to link Vcc to the SDA and SCL lines. A revised version of the board (v2.1) has footprints for the addition of pullup resistors if needed. 
 
 The v2 PCB also has a footprint to allow the use of a MAX31855 thermocouple, if builders are keen to experiment with temperature measurement, display and control of various hot processes.
 
