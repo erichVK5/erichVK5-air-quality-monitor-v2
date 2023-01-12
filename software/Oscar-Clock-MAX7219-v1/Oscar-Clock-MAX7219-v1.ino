@@ -1,6 +1,7 @@
 /*
  *
  *   Copyright (C) 2022 Erich S. Heinzle
+ *   
  *   drawString and drawSprite routines based on examples by Bartosz Bielawski
  *   included in LEDMatrixDriver library
  *
@@ -23,7 +24,7 @@
 #include "Adafruit_AM2320.h"
 #include "Adafruit_CCS811.h"
 #include "RTClib.h"
-#include "Wire.h"
+//#include "Wire.h"
 #include "SD.h"
 
 // Pin 10 CS required by SD card code
@@ -66,7 +67,7 @@ void setup()
   // wait for CCS811 startup
   while(!ccs811.available());
 
-  Wire.begin();
+  //Wire.begin();
   // check if RTC is working
   RTC.begin();
   if (!RTC.isrunning()) {
@@ -216,52 +217,80 @@ void loop()
   char strbuf[6]; // hh:mm
   int len;
   int current_minute;
+  int previous_minute = 0;
   uint16_t co2;
-  DateTime dt;
+  DateTime dt = RTC.now();
 
+  // these variable are used for adjusting the error in the RTC
+  // you will need to see how many seconds slow or fast it runs over an extended
+  // period to calculate the number of seconds per day it runs fast or slow
+  // in the prototype, it ran 8 min 26 seconds (= 506 seconds) fast over 88 days
+  // i.e. 5.75 seconds per day fast
+  uint32_t ticks_orig = dt.secondstime();
+  uint32_t ticks_current = 0;
+  uint16_t ticks_since_adjustment = 0;
+  uint16_t ticks_per_adjustment = 15026; // if running 5.75 seconds fast per day
+  int ticks_adjustment = 1;              // i.e 5.75 seconds every 86,400 seconds ( = day)
+  
+  int use_sensors = 1;
+  int adjust_error = 0; // set this to 1 if you plan to adjust RTC drift error
+  
   while (1)
   {
     dt = RTC.now();
-    delay(1000);
-    if (current_minute != dt.minute())
+    current_minute = dt.minute();
+    ticks_current = dt.secondstime();
+    if (adjust_error) {
+      ticks_since_adjustment = (ticks_current - ticks_orig)%ticks_per_adjustment;
+      if (ticks_since_adjustment >= ticks_per_adjustment) {
+        RTC.adjust(ticks_current - ticks_adjustment);
+        delay(2000); // avoid endless readjustment in a loop
+      }
+    }
+    delay(200);
+    if (current_minute != previous_minute)
     {
-      sprintf(strbuf, "T: %02d", (int)am2320.readTemperature());
-      len = strlen(strbuf);
-      drawString(&lmd, strbuf, len, 0, 0);
-      lmd.display();   // Toggle display of the new framebuffer
-      //displayTemperature(&lmd, (int)am2320.readTemperature());
-      delay(4000);
-      sprintf(strbuf, "H: %02d", (int)am2320.readHumidity());
-      len = strlen(strbuf);
-      drawString(&lmd, strbuf, len, 0, 0);
-      lmd.display();   // Toggle display of the new framebuffer
-      //displayHumidity(&lmd, (int)am2320.readHumidity());
-      delay(4000);
-      if(ccs811.available()){
-        if(!ccs811.readData()){
-          co2 = (uint16_t)ccs811.geteCO2();
-          if (co2 < 1000) {
-            sprintf(strbuf, "C:%03d", co2);
-          } else {
-            sprintf(strbuf, "C%04d", co2);
-          }
-          len = strlen(strbuf);
-          drawString(&lmd, strbuf, len, 0, 0);
-          lmd.display();   // Toggle display of the new framebuffer
-          //displayCO2(&lmd, (uint16_t)ccs811.geteCO2());
-          delay(4000);
+      if (use_sensors) {
+       sprintf(strbuf, "T: %02d", (int)am2320.readTemperature());
+       len = strlen(strbuf);
+       drawString(&lmd, strbuf, len, 0, 0);
+       lmd.display();   // Toggle display of the new framebuffer
+       delay(4000);
+       sprintf(strbuf, "H: %02d", (int)am2320.readHumidity());
+       len = strlen(strbuf);
+       drawString(&lmd, strbuf, len, 0, 0);
+       lmd.display();   // Toggle display of the new framebuffer
+       delay(4000);
+       if(ccs811.available()){
+         if(!ccs811.readData()){
+           co2 = (uint16_t)ccs811.geteCO2();
+           if (co2 < 1000) {
+             sprintf(strbuf, "C:%03d", co2);
+           } else {
+             sprintf(strbuf, "C%04d", co2);
+           }
+           len = strlen(strbuf);
+           drawString(&lmd, strbuf, len, 0, 0);
+           lmd.display();   // Toggle display of the new framebuffer
+           delay(4000);
+         }
         }
       }
-      sprintf(strbuf, "%02d%c%02d", dt.hour(), (true ? ':' : ' '), dt.minute());
+      sprintf(strbuf, "%02d%c%02d", dt.hour(), (true ? ':' : ' '), current_minute);
       len = strlen(strbuf);
       drawString(&lmd, strbuf, len, 0, 0);
       lmd.display();   // Toggle display of the new framebuffer
-      current_minute = dt.minute();
       delay(5000);
+      previous_minute = current_minute;
     }
-    if (analogRead(A0) < 50) {
+    // now to see if the time needs adjusting
+    // this only works if buttons are attached to A0...A3
+    if (0 && analogRead(A0) < 50) {
       delay(50); // software debouncing 
       if (analogRead(A0) < 50) {
+        drawString(&lmd, "A0..", 5, 0, 0);
+        lmd.display();
+        delay(500);
         adjustTime(&lmd, &RTC, &dt);
         current_minute = dt.minute();
         sprintf(strbuf, "%02d%c%02d", dt.hour(), (true ? ':' : ' '), dt.minute());
