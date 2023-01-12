@@ -95,3 +95,13 @@ Again, it is worth noting that the DS1307 real time clock seems sensitive to pow
 ![LED Matrix testing humidity](images/006-LED-matrix-version-testing-humidity-shown.JPG)
 ![LED Matrix testing C02](images/007-LED-matrix-version-testing-CO2-shown.JPG)
 ![LED Matrix testing time](images/008-LED-matrix-version-testing-time-shown.JPG)
+
+# Clock Drift Adjustment
+
+The latest version of the clock code has the necessary code to adjust the real time clock (RTC) by one second every X seconds; but this requires the user to determine how fast the clock is running fast or slow.
+
+In the prototype build, the clock ran 5.75 seconds fast every 24 hours. This was found by noting the clock ran 8 minutes 26 seconds (= 506 seconds) fast over 88 days. This allowed the number of seconds per day fast or slow (5.75 seconds), to be calculated.
+
+Given that there are 86,400 seconds in a day, this enabled the simple calculation 86400/5.75 showing that the RTC runs one second fast every 15026.0869 seconds.
+
+The code simply waits until 15026 seconds (the amount is defined at compile time in the code) have elapsed before subtracting one second from the RTC. It then waits 2 seconds to avoid an endless time correcting loop. If you can calculate the drift, you can now adjust the clock. 
