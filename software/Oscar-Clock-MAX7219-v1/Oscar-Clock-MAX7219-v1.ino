@@ -233,7 +233,7 @@ void loop()
   int ticks_adjustment = 1;              // i.e 5.75 seconds every 86,400 seconds ( = day)
   
   int use_sensors = 1;
-  int adjust_error = 0; // set this to 1 if you plan to adjust RTC drift error
+  int adjust_error = 1; // set this to 1 if you plan to adjust RTC drift error
   
   while (1)
   {
@@ -288,7 +288,9 @@ void loop()
     if (0 && analogRead(A0) < 50) {
       delay(50); // software debouncing 
       if (analogRead(A0) < 50) {
-        drawString(&lmd, "A0..", 5, 0, 0);
+        sprintf(strbuf, "A0..");
+        len = strlen(strbuf);
+        drawString(&lmd, strbuf, len, 0, 0);
         lmd.display();
         delay(500);
         adjustTime(&lmd, &RTC, &dt);
