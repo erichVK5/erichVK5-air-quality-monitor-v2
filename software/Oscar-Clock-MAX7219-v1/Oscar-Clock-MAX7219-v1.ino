@@ -243,7 +243,7 @@ void loop()
     if (adjust_error) {
       ticks_since_adjustment = (ticks_current - ticks_orig)%ticks_per_adjustment;
       if (ticks_since_adjustment >= (ticks_per_adjustment - 3)) { // allow a 2 second window
-        RTC.adjust(ticks_current - ticks_adjustment);
+        RTC.adjust(DateTime(ticks_current - ticks_adjustment));
         delay(3000); // avoid endless readjustment in a loop
       }
     }
