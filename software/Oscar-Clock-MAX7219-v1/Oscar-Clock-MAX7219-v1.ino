@@ -226,20 +226,20 @@ void loop()
   // period to calculate the number of seconds per day it runs fast or slow
   // in the prototype, it ran 8 min 26 seconds (= 506 seconds) fast over 88 days
   // i.e. 5.75 seconds per day fast
-  uint32_t ticks_orig = dt.secondstime();
+  uint32_t ticks_orig = dt.unixtime();
   uint32_t ticks_current = 0;
   uint16_t ticks_since_adjustment = 0;
   uint16_t ticks_per_adjustment = 15026; // if running 5.75 seconds fast per day
   int ticks_adjustment = 1;              // i.e 5.75 seconds every 86,400 seconds ( = day)
   
   int use_sensors = 1;
-  int adjust_error = 1; // set this to 1 if you plan to adjust RTC drift error
+  int adjust_error = 0; // set this to 1 if you plan to adjust RTC drift error
   
   while (1)
   {
     dt = RTC.now();
     current_minute = dt.minute();
-    ticks_current = dt.secondstime();
+    ticks_current = dt.unixtime();
     if (adjust_error) {
       ticks_since_adjustment = (ticks_current - ticks_orig)%ticks_per_adjustment;
       if (ticks_since_adjustment >= (ticks_per_adjustment - 3)) { // allow a 2 second window
