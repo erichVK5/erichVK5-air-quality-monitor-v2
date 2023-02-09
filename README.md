@@ -7,6 +7,8 @@ The PCB and accompanying software allow the CCS811 sensor to be used to monitor 
 
 This is a leaner version of https://github.com/erichVK5/erichVK5-air-quality-monitor, achieving a significant cost reduction by using an Arduino nano and a compact Deek Robot 8122 RTC/SD board on a custom PCB which also mounts the DF Robot CCS811 CO2/VOC sensor board and the AM2320 temperature/humidity sensor. 
 
+![current schematic](images/erichVK5-AQM-v2-2.svg)
+
 The revised v2 PCB was designed in pcb-rnd and simplifies the connections between the TM1637 display, CCS811 sensor, AM2320 sensor and Arduino Nano. The PCB dimensions have been carefully chosen to allow efficient panelisation on standard panel sizes if ordering larger quantities from PCB suppliers. By mounting the sensors, RTC, data logging and Arduino subassemblies on a single PCB, the build cost can be roughly halved. 
 
 ![PCB top side](images/PCB-top-side.JPG)
